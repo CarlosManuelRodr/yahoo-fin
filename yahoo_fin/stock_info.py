@@ -60,8 +60,13 @@ def build_url(ticker, start_date=None, end_date=None, interval="1d"):
     else:
         headers = {}
 
-    params = {"period1": start_seconds, "period2": end_seconds,
-              "interval": interval.lower(), "events": "div,splits"}
+    if interval == '1m':
+        params = {"period1": start_seconds, "period2": end_seconds,
+                  "interval": interval.lower(), "events": "div,splits",
+                  'range': '1d'}
+    else:
+        params = {"period1": start_seconds, "period2": end_seconds,
+                  "interval": interval.lower(), "events": "div,splits"}
 
     return site, headers, params
 
@@ -89,14 +94,15 @@ def get_data(ticker, start_date=None, end_date=None, index_as_date=True,
         raise AssertionError("interval must be of of '1m', '1d', '1wk', or '1mo'")
 
     if interval == "1m":
-        today = pd.Timestamp.today()
+        today = pd.to_datetime('today').normalize()
+        now = pd.Timestamp.today()
         # If today is sunday, modify the date
-        if today.dayofweek == 6:
+        if now.dayofweek == 6:
             start_date = today - pd.DateOffset(2)
             end_date = today - pd.DateOffset(1)
         else:
-            start_date = today - pd.DateOffset(1)
-            end_date = today
+            start_date = today
+            end_date = now
 
     # build and connect to URL
     site, headers, params = build_url(ticker, start_date, end_date, interval)
