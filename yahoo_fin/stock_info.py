@@ -114,32 +114,39 @@ def get_data(ticker, start_date=None, end_date=None, index_as_date=True,
     # get JSON response
     data = resp.json()
 
-    # get open / high / low / close data
-    frame = pd.DataFrame(data["chart"]["result"][0]["indicators"]["quote"][0])
+    try:
+        # get open / high / low / close data
+        frame = pd.DataFrame(data["chart"]["result"][0]["indicators"]["quote"][0])
 
-    # add in adjclose
-    if interval != "1m":
-        frame["adjclose"] = data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
+        # add in adjclose
+        if interval != "1m":
+            frame["adjclose"] = data["chart"]["result"][0]["indicators"]["adjclose"][0]["adjclose"]
 
-    # get the date info
-    temp_time = data["chart"]["result"][0]["timestamp"]
+        # get the date info
+        offset = data["chart"]["result"][0]["meta"]["currentTradingPeriod"]["regular"]["gmtoffset"]
+        temp_time = data["chart"]["result"][0]["timestamp"]
+        temp_time = [x + offset for x in temp_time]
 
-    frame.index = pd.to_datetime(temp_time, unit="s")
-    if interval != "1m":
-        frame.index = frame.index.map(lambda dt: dt.floor("d"))
+        frame.index = pd.to_datetime(temp_time, unit="s")
+        if interval != "1m":
+            frame.index = frame.index.map(lambda dt: dt.floor("d"))
 
-    if interval == "1m":
-        frame = frame[["open", "high", "low", "close", "volume"]]
-    else:
-        frame = frame[["open", "high", "low", "close", "adjclose", "volume"]]
+        if interval == "1m":
+            frame = frame[["open", "high", "low", "close", "volume"]]
+        else:
+            frame = frame[["open", "high", "low", "close", "adjclose", "volume"]]
 
-    frame['ticker'] = ticker.upper()
+        frame['ticker'] = ticker.upper()
 
-    if not index_as_date:
-        frame = frame.reset_index()
-        frame.rename(columns={"index": "date"}, inplace=True)
+        if not index_as_date:
+            frame = frame.reset_index()
+            frame.rename(columns={"index": "date"}, inplace=True)
 
-    return frame
+        return frame
+
+    except KeyError:
+        print("Invalid server response")
+        return pd.DataFrame()
 
 
 def tickers_sp500():
