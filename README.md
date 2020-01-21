@@ -378,6 +378,16 @@ Returns a list of tickers currently listed in the S&P 500.  The data for this i
 
 `tickers = tickers_sp500()`
 
+### ***tickers_ipc()***
+
+Returns a list of tickers currently listed on the mexican IPC.  No 
+parameters need to be passed.  The tickers are scraped from Yahoo 
+Finance (see [https://finance.yahoo.com/quote/%5EMXX/components?p=%5EMXX](https://finance.yahoo.com/quote/%5EMXX/components?p=%5EMXX).
+
+**Example**
+
+`tickers = tickers_ipc()`
+
 ## **<u>options module</u>**
 
 We can import any method from *options* module like this:
