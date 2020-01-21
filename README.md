@@ -33,6 +33,15 @@ If you wish to make multiple requests using a user-agent rotator is advised. Ins
 
 `pip install random_user_agent`
 
+### ***Installing***
+Create a Python package with:
+
+`python3 setup.py sdist bdist_wheel`
+
+and install:
+
+`pip3 install dist/yahoo_fin-0.8.5-py3-none-any.whl`
+
 ### ***Methods***
 
 The yahoo_fin package has two modules. These are called *stock_info* and *options*.  *stock_info* has the below primary methods.
