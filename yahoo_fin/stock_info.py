@@ -157,6 +157,13 @@ def tickers_sp500():
 
     return sp_tickers
 
+def tickers_ftse100():
+    """Downloads list of tickers currently listed in the FTSE100 """
+    ftse100 = pd.read_html("https://en.wikipedia.org/wiki/FTSE_100_Index")
+    ftse100tickers = sorted(ftse100[3].EPIC.tolist())
+
+    return ftse100tickers
+
 
 def tickers_nasdaq():
     """Downloads list of tickers currently listed in the NASDAQ"""
