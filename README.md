@@ -1,6 +1,6 @@
 # yahoo_fin
 
-Fork of yahoo_fin package from http://theautomatic.net/yahoo_fin-documentation/ with support for intraday data retrieval.
+Fork of yahoo_fin package from http://theautomatic.net/yahoo_fin-documentation/ with support for intraday data retrieval and user agent rotator.
 
 
 ### ***What is yahoo_fin?***
